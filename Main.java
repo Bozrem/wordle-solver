@@ -1,14 +1,12 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import com.thoughtworks.xstream.XStream;
+
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Main {
@@ -17,17 +15,7 @@ public class Main {
     static HashSet<String> validGuessWords;
 
     public static void main(String[] args) throws IOException {
-        validGuessWords = readGuessWords();
-        printIntro();
-        boolean gameLoop = true;
-        while (gameLoop) {
-            System.out.println("\nEnter the word to score. Must contain 5 alphabetical letters");
-            String guess = getGuess();
-            System.out.println("\n\n\n\n\n\n\n\n\nCalculating score of " + guess.toUpperCase() + ". Please wait...");
-            System.out.println(guess.toUpperCase() + " received an average of " + getScore(guess) + "% answers removed!");
-            gameLoop = continuePlaying();
-        }
-        printOutro();
+
     }
 
     public static HashSet<String> readGuessWords() {
@@ -45,8 +33,15 @@ public class Main {
         return hashSet;
     }
 
+
     public static String[] readEndWords() throws IOException {
         Path path = Path.of("endWords.txt").toAbsolutePath();
+        List<String> endWordLines = Files.readAllLines(path, Charset.defaultCharset());
+        return endWordLines.toArray(new String[0]);
+    }
+
+    public static String[] readGuessWordsArray() throws IOException {
+        Path path = Path.of("guessWords.txt").toAbsolutePath();
         List<String> endWordLines = Files.readAllLines(path, Charset.defaultCharset());
         return endWordLines.toArray(new String[0]);
     }

@@ -7,23 +7,28 @@ enum Color {
 }
 
 public class Word {
-    private final String guess;
-    private final Color[] colors = new Color[5];
+    private String guess;
+    private final ColorSet colors;
     private final boolean[] usedLetters = new boolean[5];
 
     public Word(String guess) {
         this.guess = guess;
+        colors = new ColorSet(new Color[]{Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY});
         for (int i = 0; i < 5; i++){
-            colors[i] = Color.GRAY;
+            colors.setColor(i, Color.GRAY);
         }
+    }
+    public Word(String guess, ColorSet colors){
+        this.guess = guess;
+        this.colors = colors;
     }
 
     public void setColor(int index, Color color) {
-        colors[index] = color;
+        colors.setColor(index, color);
     }
 
     public Color getColor(int index){
-        return colors[index];
+        return colors.getColor(index);
     }
 
     public boolean isLetterUsed(int index){
@@ -39,11 +44,15 @@ public class Word {
     }
 
     public boolean isEqualColors(Word otherData){
-        for (int i = 0; i < colors.length; i++){
-            if (!colors[i].equals(otherData.getColor(i))){
+        for (int i = 0; i < 5; i++){
+            if (!colors.getColor(i).equals(otherData.getColor(i))){
                 return false;
             }
         }
         return true;
+    }
+
+    public ColorSet toColorSet(){
+        return colors;
     }
 }

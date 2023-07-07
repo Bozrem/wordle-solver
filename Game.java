@@ -21,6 +21,12 @@ public class Game {
         originalLength = answerDataset.length;
     }
 
+    public Game(String guess, ColorSet colors, String[] answerDataset){
+        this.guess = new Word(guess, colors);
+        availableWords.addAll(Arrays.asList(answerDataset));
+        originalLength = answerDataset.length;
+    }
+
     public static void getColors(Word guess, String answer) {
         doGreenLetters(guess, answer);
         doYellowLetters(guess, answer);
@@ -61,7 +67,15 @@ public class Game {
         }
     }
 
+    public ArrayList<String> getAvailableWords(){
+        return availableWords;
+    }
+
     public double getScore() {
         return 100 * (1 - (double) availableWords.size() / originalLength);
+    }
+
+    public Word getGuess() {
+        return guess;
     }
 }
