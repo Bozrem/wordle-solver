@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -22,11 +21,19 @@ public class Main {
      */
 
     public static void main(String[] args) throws IOException {
+        boolean solved = false;
         System.out.println("Recommended starting words ROATE or RAISE");
-        Game game = new Game(getGuess(), getColors());
-        game.updateAnswerSet();
-        System.out.println("Next best guess is " + game.getBestGuess().toUpperCase());
-        while (runNextGuess(game)) {
+        String guess = getGuess();
+        ColorSet colors = getColors();
+        Game game = new Game(guess, colors);
+        if (colors.equals(new ColorSet("ggggg"))) solved = true;
+        else {
+            game.updateAnswerSet();
+            System.out.println("Calculating...");
+            printRemainingWords(game);
+            System.out.println("\nNext best guess is " + game.getBestGuess().toUpperCase());
+        }
+        while (!solved && runNextGuess(game)) {
 
         }
         System.out.println("Congrats :)");
@@ -39,10 +46,22 @@ public class Main {
         if (colors.equals(new ColorSet("ggggg"))) return false;
         game.update(guess, colors);
         game.updateAnswerSet();
-        System.out.println(game.getAvailableWords());
         System.out.println("Calculating...");
-        System.out.println("Next best guess is " + game.getBestGuess().toUpperCase());
+        if (game.getAvailableWords().size() == 1){
+            System.out.println("The answer is " + game.getAvailableWords().get(0).toUpperCase());
+            return false;
+        }
+        printRemainingWords(game);
+        System.out.println("\nNext best guess is " + game.getBestGuess().toUpperCase());
         return true;
+    }
+
+    public static void printRemainingWords(Game game){
+        ArrayList<String> list = game.getAvailableWords();
+        System.out.println("The following answers are still possible: ");
+        for (String answer : list){
+            System.out.print(answer + " ");
+        }
     }
 
     public static String getGuess(){
@@ -65,49 +84,5 @@ public class Main {
         Path path = Path.of("guessWords.txt").toAbsolutePath();
         List<String> endWordLines = Files.readAllLines(path, Charset.defaultCharset());
         return endWordLines.toArray(new String[0]);
-    }
-
-    private static String getColorInput() {
-        String str = "";
-        boolean guessLoop = true;
-        while (guessLoop) {
-            str = scan.nextLine().toLowerCase();
-            guessLoop = !isValidGuess(str);
-        }
-        System.out.println("Calculating...");
-        return str;
-    }
-
-    private static boolean isValidGuess(String guess) {
-        // I assume you'll be using isInWordle here, included for testing
-        if (isValidGuessLength(guess) && isValidGuessCharacters(guess)) {
-            return true;
-        }
-        System.out.println("Please try again");
-        return false;
-    }
-
-    private static boolean isValidGuessCharacters(String guess) {
-        for (int i = 0; i < guess.length(); i++) {
-            if (!"bgy".contains(String.valueOf(guess.charAt(i)))) {
-                System.out.println("Incorrect color format!");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isValidGuessLength(String guess) {
-        if (guess.length() == 5) {
-            return true;
-        }
-        System.out.println("The guess must be 5 characters in length!");
-        return false;
-    }
-
-    private static boolean continuePlaying() {
-        System.out.println("Did that solve the game? [Y/N]");
-        String prompt = scan.nextLine().toLowerCase();
-        return prompt.equals("y");
     }
 }
