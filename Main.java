@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -22,9 +23,36 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Recommended starting words ROATE or RAISE");
-        Guess testGuess = new Guess("roate", new ColorSet("ybybb"), new ArrayList<>(Arrays.asList(readEndWords())));
-        testGuess.eliminateAnswers();
-        System.out.println(testGuess.getAnswerSet());
+        Game game = new Game(getGuess(), getColors());
+        game.updateAnswerSet();
+        System.out.println("Next best guess is " + game.getBestGuess().toUpperCase());
+        while (runNextGuess(game)) {
+
+        }
+        System.out.println("Congrats :)");
+
+    }
+
+    public static boolean runNextGuess(Game game) throws IOException {
+        String guess = getGuess();
+        ColorSet colors = getColors();
+        if (colors.equals(new ColorSet("ggggg"))) return false;
+        game.update(guess, colors);
+        game.updateAnswerSet();
+        System.out.println(game.getAvailableWords());
+        System.out.println("Calculating...");
+        System.out.println("Next best guess is " + game.getBestGuess().toUpperCase());
+        return true;
+    }
+
+    public static String getGuess(){
+        System.out.println("guess: ");
+        return scan.nextLine().toLowerCase();
+    }
+
+    public static ColorSet getColors(){
+        System.out.println("colors: ");
+        return new ColorSet(scan.nextLine().toLowerCase());
     }
 
     public static String[] readEndWords() throws IOException {
