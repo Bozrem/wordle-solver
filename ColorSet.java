@@ -16,16 +16,19 @@ public class ColorSet {
             switch (colors.charAt(i)) {
                 case 'b':
                     this.colors[i] = Color.GRAY;
+                    break;
                 case 'y':
                     this.colors[i] = Color.YELLOW;
+                    break;
                 case 'g':
                     this.colors[i] = Color.GREEN;
+                    break;
             }
         }
     }
 
     public ColorSet(){
-
+        this("bbbbb");
     }
 
     public Color getColor(int index) {
@@ -85,4 +88,12 @@ public class ColorSet {
         return str.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        ColorSet otherColors = (ColorSet) obj;
+        for (int i = 0; i < 5; i++){
+            if (!otherColors.getColor(i).equals(colors[i])) return false;
+        }
+        return true;
+    }
 }

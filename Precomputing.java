@@ -1,9 +1,7 @@
 package org.example;
-
+/*
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class Precomputing {
     /*
@@ -11,8 +9,9 @@ public class Precomputing {
      * Have an update function that assigns a word to the color
      * Program can then come back to where if left off by going through colors until one is unassigned
      * */
+/*
     public static void main(String[] args) throws IOException {
-        String[] guessWords = Main.readGuessWordsArray();
+        String[] guessWords = Main.readGuessWords();
         String[] endWords = Main.readEndWords();
         DataStorage storage = new DataStorage();
         storage.loadFromFile("colorBase.dat");
@@ -30,7 +29,7 @@ public class Precomputing {
         *   Get average score, if it's the best for that ColorSet save it
         *  Load bestGuess and the ColorSet to storage
          */
-
+/*
         ColorSet colorset = new ColorSet();
         while (colorset.incrementColor()){
             ArrayList<String> availableWords = getAvailableWords(colorset, endWords);
@@ -48,6 +47,22 @@ public class Precomputing {
             System.out.println(colorset + " " + bestGuess);
             //storage.updateWord(colorset, bestGuess, "colorBase.dat");
         }
+    }
+
+    public static String getBestGuess(ColorSet colors, String[] endWords) throws IOException {
+        String[] guessWords = Main.readGuessWords();
+        ArrayList<String> availableWords = getAvailableWords(colors, endWords);
+        //System.out.println(availableWords + "\n"); for debug
+        double bestScore = 0;
+        String bestGuess = "";
+        for (String guess : guessWords){
+            double averageScore = getAverageScore(guess, availableWords);
+            if (averageScore > bestScore){
+                bestGuess = guess;
+                bestScore = averageScore;
+            }
+        }
+        return bestGuess;
     }
 
     public static double getAverageScore(String guess, ArrayList<String> availableWords){
@@ -78,5 +93,6 @@ public class Precomputing {
         storage.saveToFile("colorBase.dat");
     }
 }
+*/
 
 
